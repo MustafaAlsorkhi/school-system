@@ -1,31 +1,57 @@
- 
- class student {
+class student {
+    static arr = [];
 
-    constructor (name,date,gender,Phone,garde){     
-        this.name = name;
-        this.date = date;
-        this.gender = gender;
-        this.Phone = Phone;
-        this.garde = garde;
+    constructor (info) {     
+        this.info = info;
     }
-      myfunction(...a){
-        let arr=[];
 
-        arr.push(a);
-        console.log(arr)
-      
-          localStorage.setItem("Students", JSON.stringify(a));
-      }
- }
- 
+    myfunction(){
+        student.arr.push(this.info);
+        localStorage.setItem("Students", JSON.stringify(student.arr));     /// convert the data from java script to json
+    }
+}
 
- let tableInfo  = document.getElementById("table");
-
+let tableInfo = document.getElementById("table");
 let submit = document.getElementById("Submit");
 
-submit.addEventListener("click" , (eventt) =>{
+// Restore the data saved when the page loads
+document.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("Students")) {
+        const savedStudents = JSON.parse(localStorage.getItem("Students"));      // convert the data from json to java script to display it
+        student.arr = savedStudents;
+
+//Display data saved in localStorage
+        savedStudents.forEach((studentInfo) => {
+            createStudentCard(studentInfo);
+        });
+    }
+});
+
+function createStudentCard(info) {
+    let card = document.createElement("div");
+    card.style.border = "2px solid black";
+    card.style.marginLeft = "10px";
+    card.style.marginTop = "7px";
+    card.style.width = "120px";
+    card.style.backgroundColor = "#f3f4f7";
+
+    let imgg = document.createElement("img");
+    imgg.src = 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+    imgg.classList.add("photo");
+    card.appendChild(imgg);
+
+    for (const value of info) {
+        let div = document.createElement("div");
+        div.innerHTML = value;
+        card.appendChild(div);
+    }
+
+    let cardSIn = document.getElementById("cardSIn");
+    cardSIn.appendChild(card);
+}
+
+submit.addEventListener("click", (eventt) => {
     eventt.preventDefault();
-    
     let row = document.createElement("tr")
     let nameT= document.createElement("td")
     let dateT= document.createElement("td")
@@ -33,7 +59,6 @@ submit.addEventListener("click" , (eventt) =>{
     let PhoneT= document.createElement("td")
     let gradeT= document.createElement("td")
     
-    nameT.innerHTML=document.getElementById("name").value;
     dateT.innerHTML=document.getElementById("date").value;
     genderT.innerHTML=document.getElementById("gender").value;
     PhoneT.innerHTML=document.getElementById("Phone").value;
@@ -46,68 +71,24 @@ submit.addEventListener("click" , (eventt) =>{
      row.appendChild(gradeT);
 
      tableInfo.appendChild(row);
+//_________________________________________________________________________________________
+    const info = [
+        
+        document.getElementById("name").value,
+        document.getElementById("date").value,
+        document.getElementById("gender").value,
+        document.getElementById("Phone").value,
+        document.getElementById("grade").value
+    ];
 
 
-//________________________________________________________________________________________________________________________________________
-
-    let card = document.createElement("div");
-    card.style.border = "1px solid black";
-    card.style.marginLeft="10px"
-    card.style.marginTop="7px"
-    card.style.width="120px"
+// Save data to localStorage
+    let hh = new student(info);
+    hh.myfunction();
 
 
-    let imgg = document.createElement("img");
+// Create and display the student card
+    createStudentCard(info);
 
-    let name= document.createElement("div")
-    let date= document.createElement("div")
-    let gender= document.createElement("div")
-    let Phone= document.createElement("div")
-    let grade= document.createElement("div")
-    
-   
-
-    imgg.src="mgmg/edfw.png"
-    
-    
-    name.innerHTML=document.getElementById("name").value;
-    date.innerHTML=document.getElementById("date").value;
-    gender.innerHTML=document.getElementById("gender").value;
-
-
-    Phone.innerHTML=document.getElementById("Phone").value;
-    grade.innerHTML=document.getElementById("grade").value;
-
-
-let nName = document.getElementById("name").value;
-let nDate = document.getElementById("date").value;
-let nGender = document.getElementById("gender").value;
-
-
-let nPhone = document.getElementById("Phone").value;
-let nGrade = document.getElementById("grade").value;
-
-
- let hh = new student(name,date,gender,Phone,grade);     
- hh.myfunction([nName,nDate,nGender,nPhone,nGrade]);          
-
-    card.appendChild(imgg);
-    card.appendChild(name);
-    card.appendChild(date);
-    card.appendChild(gender);
-    card.appendChild(Phone);
-    card.appendChild(grade);
-
-    let cardSIn = document.getElementById("cardSIn");
-    
-    cardSIn.appendChild(card);     
-
-
-
-
-
-
-
+  
 });
-
-
